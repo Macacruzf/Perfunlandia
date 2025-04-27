@@ -14,6 +14,7 @@ public class Usuario {
     private int rut;
     private String nombre;
     private String correo;
+    private String password;
     private int contacto;
     private String fechaRegistro;
 

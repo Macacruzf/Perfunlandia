@@ -12,12 +12,13 @@ public class UsuarioRepository {
     private List<Usuario> listausuarios = new ArrayList<>();
     private long idCounter = 1L;
 
-    public Usuario creaUsuario(int rut, String nombre, String correo, int contacto, String fechaRegistro ){
+    public Usuario creaUsuario(int rut, String nombre, String correo,String password, int contacto, String fechaRegistro ){
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(idCounter);
         usuario.setRut(rut);
         usuario.setNombre(nombre);
         usuario.setCorreo(correo);
+        usuario.setPassword(password);
         usuario.setContacto(contacto);
         usuario.setFechaRegistro(fechaRegistro);
         listausuarios.add(usuario);
@@ -53,6 +54,14 @@ public class UsuarioRepository {
         if (usuario != null) {
             listausuarios.remove(usuario);
         }
+    }
+    public Usuario buscarPorCorreo(String correo) {
+        for (Usuario usuario : listausuarios) {
+            if (usuario.getCorreo().equalsIgnoreCase(correo)) { // Compara correo sin importar mayúsculas/minúsculas
+                return usuario;
+            }
+        }
+        return null;
     }
 
 
