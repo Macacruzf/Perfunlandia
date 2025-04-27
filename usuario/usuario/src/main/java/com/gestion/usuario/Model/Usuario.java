@@ -1,3 +1,4 @@
+
 package com.gestion.usuario.Model;
 
 import lombok.AllArgsConstructor;
@@ -17,3 +18,7 @@ public class Usuario {
     private String fechaRegistro;
 
 }
+
+
+
+
