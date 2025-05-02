@@ -1,4 +1,4 @@
-package com.microservicio.autenticacion.Model;
+package com.microservicio.autenticacion.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,5 +11,7 @@ public class Usuario {
     private Long idUsuario;
     private String correo;
     private String password;
+
+  
 
 }
