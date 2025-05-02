@@ -1,5 +1,5 @@
 
-package com.gestion.usuario.Model;
+package com.gestion.usuario.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

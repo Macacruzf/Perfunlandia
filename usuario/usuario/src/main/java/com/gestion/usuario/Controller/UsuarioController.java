@@ -1,4 +1,4 @@
-package com.gestion.usuario.Controller;
+package com.gestion.usuario.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gestion.usuario.Model.Usuario;
-import com.gestion.usuario.Service.UsuarioService;
+import com.gestion.usuario.model.Usuario;
+import com.gestion.usuario.service.UsuarioService;
 
 import java.util.List;
 @RestController

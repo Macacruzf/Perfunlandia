@@ -1,8 +1,8 @@
-package com.gestion.usuario.Repository;
+package com.gestion.usuario.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.gestion.usuario.Model.Rol;
+import com.gestion.usuario.model.Rol;
 
 import java.util.ArrayList;
 import java.util.List;

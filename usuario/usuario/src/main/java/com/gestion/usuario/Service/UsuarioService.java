@@ -1,10 +1,10 @@
-package com.gestion.usuario.Service;
+package com.gestion.usuario.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gestion.usuario.Model.Usuario;
-import com.gestion.usuario.Repository.UsuarioRepository;
+import com.gestion.usuario.model.Usuario;
+import com.gestion.usuario.repository.UsuarioRepository;
 
 import java.util.List;
 

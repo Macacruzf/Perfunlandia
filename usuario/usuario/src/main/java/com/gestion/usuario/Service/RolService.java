@@ -1,6 +1,6 @@
-package com.gestion.usuario.Service;
-import com.gestion.usuario.Model.Rol;
-import com.gestion.usuario.Repository.RolRepository;
+package com.gestion.usuario.service;
+import com.gestion.usuario.model.Rol;
+import com.gestion.usuario.repository.RolRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

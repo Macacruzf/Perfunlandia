@@ -1,4 +1,4 @@
-package com.gestion.usuario.Controller;
+package com.gestion.usuario.controller;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gestion.usuario.Model.Rol;
-import com.gestion.usuario.Service.RolService;
+import com.gestion.usuario.model.Rol;
+import com.gestion.usuario.service.RolService;
 
 @RestController
 @RequestMapping("/roles") // Ruta base para las solicitudes (localhost:8080/roles)
