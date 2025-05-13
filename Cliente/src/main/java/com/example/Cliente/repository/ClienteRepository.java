@@ -1,48 +1,22 @@
-package com.example.cliente.repository;
+package com.example.Cliente.repository;
 
+import com.example.Cliente.model.Cliente;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ClienteRepository {
+public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
-    private List<Cliente> listaclientes = new ArrayList<>();
-    //private long idCounter = 1L;
+    // Buscar cliente por RUN
+    @Query("SELECT c FROM Cliente c WHERE c.runCliente = :run")
+    Cliente findByRunCliente(@Param("run") String run);
 
-    @Autowired
+    // Buscar clientes por región
+    List<Cliente> findByRegionCliente(String region);
 
-    @GetMapping("/cliente/{idCliente}")
-    public ResponseEntity<Cliente> getCliente(@PathVariable Long idCliente) {
-        Cliente cliente = clienteService.getClienteByidCliente(idCliente);
-        return ResponseEntity.ok(cliente);
-    }
-
-    public Cliente actualizar(Cliente cliente) {
-        for (int i = 0; i < listaclientes.size(); i++) {
-            if (listaclientes.get(i).getIdCliente().equals(cliente.getIdCliente())) {
-                listaclientes.set(i, cliente);
-                return cliente;
-            }
-        }
-        return null;
-    }
-
-    
-    public Cliente buscarPorId(Long id) {
-        for (Cliente cliente : listaclientes) {
-            if (cliente.getIdCliente().equals(id)){
-                return cliente;
-            }
-        }
-        return null;
-    }
-    
-    
-
-        
+    // Verificar si un correo existe
+    boolean existsByCorreoCliente(String correo);
 }
