@@ -18,7 +18,14 @@ public class Soporte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idSoporte")
     private Long id;
+
+    @Column(name = "idCliente", nullable = false)
+    private Long idCliente;  
+
+    @Column(name = "idPedido")
+    private Long idPedido; 
 
     @Column(nullable = false, length = 50)
     private String titulo;
