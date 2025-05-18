@@ -22,14 +22,14 @@ public class Inventario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_inventario") //los nombra para mayor orden
+    @Column(name = "idInventario") //los nombra para mayor orden
     private Long id;
 
-    @Column(name = "id_producto", nullable = false)
+    @Column(name = "idProducto", nullable = false)
     private Long idProducto;
 
     @ManyToOne //para que se conecte con la otra tabla
-    @JoinColumn(name = "id_sucursal", nullable = false)
+    @JoinColumn(name = "idSucursal", nullable = false)
     private Sucursal sucursal;
 
     @Column(nullable = false)

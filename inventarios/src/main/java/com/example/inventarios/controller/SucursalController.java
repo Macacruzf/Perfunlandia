@@ -22,9 +22,9 @@ public class SucursalController {
     public ResponseEntity<List<Sucursal>> obtenerSucursales() {
         List<Sucursal> lista = sucursalService.listarSucursales();
         if (lista.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204
+            return ResponseEntity.noContent().build(); // error204
         }
-        return ResponseEntity.ok(lista); // 200
+        return ResponseEntity.ok(lista); // error200
     }
 
     
@@ -32,15 +32,15 @@ public class SucursalController {
     public ResponseEntity<Sucursal> obtenerSucursalPorId(@PathVariable Long id) {
         try {
             Sucursal sucursal = sucursalService.buscarSucursalPorId(id).orElseThrow();
-            return ResponseEntity.ok(sucursal); // 200
+            return ResponseEntity.ok(sucursal); // error200
         } catch (Exception e) {
-            return ResponseEntity.notFound().build(); // 404
+            return ResponseEntity.notFound().build(); // error404
         }
     }
 
     // Crea la nueva sucursal
     @PostMapping
     public ResponseEntity<Object> guardarSucursal(@RequestBody Sucursal nueva) {
-        return ResponseEntity.status(201).body(sucursalService.guardarSucursal(nueva)); // 201
+        return ResponseEntity.status(201).body(sucursalService.guardarSucursal(nueva)); // error201
     }
 }
