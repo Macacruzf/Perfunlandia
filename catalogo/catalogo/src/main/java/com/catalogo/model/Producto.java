@@ -32,6 +32,9 @@ public class Producto {
     private BigDecimal precio;
 
     @Column(nullable = false)
+    private Integer stock;
+
+    @Column(nullable = false)
     private Long categoriaId;
 }
 

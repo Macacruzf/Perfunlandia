@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Cupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idCupon;
 
     @Column(nullable = false, unique = true)
     private String codigo;
@@ -31,8 +31,7 @@ public class Cupon {
     @Column(nullable = false)
     private LocalDateTime fechaExpiracion;
 
-    @Column(nullable = false)
-    private Integer limiteUso;
+
 
     @Column(nullable = false)
     private Integer usosActuales;

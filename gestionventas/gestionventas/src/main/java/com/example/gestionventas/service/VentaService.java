@@ -81,11 +81,11 @@ public class VentaService {
 
     public Devolucion procesarDevolucion(Devolucion devolucion) {
         // Validar venta sin almacenar en variable
-        ventaRepository.findById(devolucion.getVentaId())
+        ventaRepository.findById(devolucion.getDetalleVentaId())
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
 
         // Validar producto en los detalles de la venta
-        List<DetalleVenta> detalles = detalleVentaRepository.findByVentaId(devolucion.getVentaId());
+        List<DetalleVenta> detalles = detalleVentaRepository.findByVentaId(devolucion.getDetalleVentaId());
         boolean productoEncontrado = detalles.stream()
                 .anyMatch(d -> d.getProductoId().equals(devolucion.getProductoId()) && d.getCantidad() >= devolucion.getCantidad());
         if (!productoEncontrado) {

@@ -29,7 +29,7 @@ public class PromocionService {
         if (cupon.getFechaExpiracion().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("La fecha de expiración no puede estar en el pasado");
         }
-        if (cupon.getLimiteUso() <= 0) {
+        if (descuento.getLimiteUso() <= 0) {
             throw new RuntimeException("El límite de uso debe ser mayor a cero");
         }
         if (cupon.getDescuento() <= 0) {

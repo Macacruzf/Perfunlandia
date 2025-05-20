@@ -19,7 +19,7 @@ public class Devolucion {
     private Long id;
 
     @Column(nullable = false)
-    private Long ventaId;
+    private Long DetalleVentaId;
 
     @Column(nullable = false)
     private Long productoId;
