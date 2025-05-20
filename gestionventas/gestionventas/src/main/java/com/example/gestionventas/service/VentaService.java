@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.gestionventas.Repository.DetalleVentaRepository;
-import com.example.gestionventas.Repository.DevolucionRepository;
 import com.example.gestionventas.Repository.VentaRepository;
 import com.example.gestionventas.model.DetalleVenta;
-import com.example.gestionventas.model.Devolucion;
 import com.example.gestionventas.model.Venta;
 import com.example.gestionventas.webclient.ClienteClient;
+import com.example.gestionventas.webclient.DireccionClient;
+import com.example.gestionventas.webclient.EstadoClient;
 import com.example.gestionventas.webclient.InventarioClient;
 
 
@@ -27,12 +27,19 @@ import jakarta.transaction.Transactional;
 public class VentaService {
 @Autowired
     private VentaRepository ventaRepository;
+
     @Autowired
     private DetalleVentaRepository detalleVentaRepository;
-    @Autowired
-    private DevolucionRepository devolucionRepository;
+
     @Autowired
     private ClienteClient clienteClient;
+
+    @Autowired
+    private DireccionClient direccionClient;
+
+    @Autowired
+    private EstadoClient estadoClient;
+
     @Autowired
     private InventarioClient inventarioClient;
 
@@ -41,83 +48,76 @@ public class VentaService {
     }
 
     public Venta registrarVenta(Venta venta, List<DetalleVenta> detalles) {
-        // Validar cliente
-        Map<String, Object> cliente = clienteClient.getClienteById(venta.getClienteId());
+        // Validar cliente (microservicio de usuario)
+        Map<String, Object> cliente = clienteClient.getClienteById(venta.getIdCliente());
         if (cliente == null || cliente.isEmpty()) {
             throw new RuntimeException("Cliente no encontrado");
         }
 
-        // Validar y actualizar stock de productos
+        // Validar dirección (microservicio de dirección)
+        Map<String, Object> direccion = direccionClient.getDireccionById(venta.getIdDireccion());
+        if (direccion == null || direccion.isEmpty()) {
+            throw new RuntimeException("Dirección no encontrada");
+        }
+
+        // Validar estado_envio (microservicio de estado)
+        Map<String, Object> estadoEnvio = estadoClient.getEstadoEnvioById(venta.getIdEstadoEnvio());
+        if (estadoEnvio == null || estadoEnvio.isEmpty()) {
+            throw new RuntimeException("Estado de envío no encontrado");
+        }
+
+        // Validar y actualizar stock de productos (microservicio de producto)
         BigDecimal total = BigDecimal.ZERO;
         for (DetalleVenta detalle : detalles) {
-            Map<String, Object> producto = inventarioClient.getProductoById(detalle.getProductoId());
+            Map<String, Object> producto = inventarioClient.getProductoById(detalle.getIdProducto());
             if (producto == null || producto.isEmpty()) {
-                throw new RuntimeException("Producto no encontrado: " + detalle.getProductoId());
+                throw new RuntimeException("Producto no encontrado: " + detalle.getIdProducto());
             }
             Integer stock = (Integer) producto.get("stock");
             if (stock < detalle.getCantidad()) {
-                throw new RuntimeException("Stock insuficiente para el producto: " + detalle.getProductoId());
+                throw new RuntimeException("Stock insuficiente para el producto: " + detalle.getIdProducto());
             }
             BigDecimal precio = new BigDecimal(producto.get("precio").toString());
-            detalle.setPrecioUnitario(precio);
             detalle.setSubtotal(precio.multiply(BigDecimal.valueOf(detalle.getCantidad())));
             total = total.add(detalle.getSubtotal());
-            inventarioClient.actualizarStock(detalle.getProductoId(), detalle.getCantidad());
+            inventarioClient.actualizarStock(detalle.getIdProducto(), detalle.getCantidad());
         }
 
         // Guardar venta
-        venta.setFecha(LocalDateTime.now());
+        venta.setFechaventa(LocalDateTime.now());
         venta.setTotal(total);
         Venta savedVenta = ventaRepository.save(venta);
 
         // Guardar detalles
         for (DetalleVenta detalle : detalles) {
-            detalle.setVentaId(savedVenta.getId());
+            detalle.setIdVenta(savedVenta.getIdVenta());
             detalleVentaRepository.save(detalle);
         }
 
         return savedVenta;
     }
 
-    public Devolucion procesarDevolucion(Devolucion devolucion) {
-        // Validar venta sin almacenar en variable
-        ventaRepository.findById(devolucion.getVentaId())
-                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
-
-        // Validar producto en los detalles de la venta
-        List<DetalleVenta> detalles = detalleVentaRepository.findByVentaId(devolucion.getVentaId());
-        boolean productoEncontrado = detalles.stream()
-                .anyMatch(d -> d.getProductoId().equals(devolucion.getProductoId()) && d.getCantidad() >= devolucion.getCantidad());
-        if (!productoEncontrado) {
-            throw new RuntimeException("Producto no encontrado en la venta o cantidad inválida");
-        }
-
-        // Restaurar stock
-        inventarioClient.actualizarStock(devolucion.getProductoId(), -devolucion.getCantidad());
-
-        // Guardar devolución
-        devolucion.setFecha(LocalDateTime.now());
-        return devolucionRepository.save(devolucion);
-    }
-
     public String generarFactura(Long ventaId) {
         Venta venta = ventaRepository.findById(ventaId)
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
         List<DetalleVenta> detalles = detalleVentaRepository.findByVentaId(ventaId);
-        Map<String, Object> cliente = clienteClient.getClienteById(venta.getClienteId());
+        Map<String, Object> cliente = clienteClient.getClienteById(venta.getIdCliente());
+        Map<String, Object> direccion = direccionClient.getDireccionById(venta.getIdDireccion());
+        Map<String, Object> estadoEnvio = estadoClient.getEstadoEnvioById(venta.getIdEstadoEnvio());
 
-        // Generar factura (simulada como texto, podría integrarse con un servicio de facturación)
+        // Generar factura (simulada como texto)
         StringBuilder factura = new StringBuilder();
         factura.append("Factura Electrónica\n");
         factura.append("Cliente: ").append(cliente.get("nombre")).append("\n");
-        factura.append("Fecha: ").append(venta.getFecha()).append("\n");
+        factura.append("Dirección: ").append(direccion.get("direccion")).append("\n");
+        factura.append("Estado de Envío: ").append(estadoEnvio.get("estado")).append("\n");
+        factura.append("Fecha: ").append(venta.getFechaventa()).append("\n");
         factura.append("Total: ").append(venta.getTotal()).append("\n");
         factura.append("Detalles:\n");
         for (DetalleVenta detalle : detalles) {
-            Map<String, Object> producto = inventarioClient.getProductoById(detalle.getProductoId());
+            Map<String, Object> producto = inventarioClient.getProductoById(detalle.getIdProducto());
             factura.append("- ").append(producto.get("nombre"))
                     .append(": ").append(detalle.getCantidad())
-                    .append(" x ").append(detalle.getPrecioUnitario())
                     .append(" = ").append(detalle.getSubtotal()).append("\n");
         }
         return factura.toString();

@@ -20,20 +20,17 @@ import lombok.NoArgsConstructor;
 public class DetalleVenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idDetalle; // Cambiado de 'id' a 'id_detalle'
 
     @Column(nullable = false)
-    private Long ventaId;
+    private Long idVenta;
 
     @Column(nullable = false)
-    private Long productoId;
+    private Long idProducto; // Asociado al microservicio de producto
 
     @Column(nullable = false)
     private Integer cantidad;
 
     @Column(nullable = false)
-    private BigDecimal precioUnitario;
-
-    @Column
     private BigDecimal subtotal;
 }

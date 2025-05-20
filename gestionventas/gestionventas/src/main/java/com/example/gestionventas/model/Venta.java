@@ -21,25 +21,22 @@ import lombok.NoArgsConstructor;
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idVenta; // Cambiado de 'id' a 'idVenta'
 
     @Column(nullable = false)
-    private Long clienteId;
+    private Long idCliente; // Asociado al microservicio de usuario
 
     @Column(nullable = false)
-    private Long empleadoId;
+    private Long idDireccion; // Asociado al microservicio de dirección
+
+    @Column(nullable = false)
+    private Long idEstadoEnvio; // Asociado al microservicio de estado (tabla estado_envio)
+
+    @Column(nullable = false)
+    private LocalDateTime fechaventa; // Cambiado de 'fecha' a 'fecha_venta'
 
     @Column(nullable = false)
     private BigDecimal total;
-
-    @Column(nullable = false)
-    private LocalDateTime fecha;
-
-    @Column
-    private BigDecimal descuento;
-
-    @Column
-    private String transaccionId; // Nuevo campo para almacenar el ID de la transacción
 }
 
 

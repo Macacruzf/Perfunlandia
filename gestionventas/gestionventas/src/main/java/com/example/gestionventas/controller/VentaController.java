@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.gestionventas.model.DetalleVenta;
-import com.example.gestionventas.model.Devolucion;
 
 import com.example.gestionventas.model.Venta;
 import com.example.gestionventas.service.VentaService;
@@ -20,7 +19,7 @@ import com.example.gestionventas.service.VentaService;
 @RestController
 @RequestMapping("/api/v1/ventas")
 public class VentaController {
-    @Autowired
+@Autowired
     private VentaService ventaService;
 
     @GetMapping
@@ -37,16 +36,6 @@ public class VentaController {
         try {
             Venta venta = ventaService.registrarVenta(ventaRequest.getVenta(), ventaRequest.getDetalles());
             return ResponseEntity.status(201).body(venta);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/devoluciones")
-    public ResponseEntity<?> procesarDevolucion(@RequestBody Devolucion devolucion) {
-        try {
-            Devolucion savedDevolucion = ventaService.procesarDevolucion(devolucion);
-            return ResponseEntity.status(201).body(savedDevolucion);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
