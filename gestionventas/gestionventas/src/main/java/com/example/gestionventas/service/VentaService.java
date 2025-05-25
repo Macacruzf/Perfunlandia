@@ -140,7 +140,7 @@ public class VentaService {
     public String generarFactura(Long ventaId) {
         Venta venta = ventaRepository.findById(ventaId)
                 .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
-        List<DetalleVenta> detalles = detalleVentaRepository.findByIdVenta(ventaId);
+        List<DetalleVenta> detalles = detalleVentaRepository.findByVentaIdVenta(ventaId);
         Map<String, Object> cliente = clienteClient.getUsuarioById(venta.getIdUsuario());
         Map<String, Object> direccion = direccionClient.getDireccionById(venta.getIdDireccion());
         Map<String, Object> estadoEnvio = estadoClient.getEstadoEnvioById(venta.getIdEstadoEnvio());
@@ -177,5 +177,9 @@ public class VentaService {
             factura.append("\n");
         }
         return factura.toString();
+    }
+    public List<DetalleVenta> getDetallesPorVenta(Long idVenta) {
+    return detalleVentaRepository.findByVentaIdVenta(idVenta);
+
     }
 }

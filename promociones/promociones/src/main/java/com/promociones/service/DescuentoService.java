@@ -1,17 +1,16 @@
 package com.promociones.service;
 
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import com.promociones.model.Descuento;
 import com.promociones.model.Promocion;
 import com.promociones.repository.DescuentoRepository;
 import com.promociones.repository.PromocionRepository;
+import com.promociones.webclient.ProductoClient;
 
 import jakarta.transaction.Transactional;
 
@@ -20,40 +19,43 @@ import jakarta.transaction.Transactional;
 public class DescuentoService {
     private final DescuentoRepository descuentoRepository;
     private final PromocionRepository promocionRepository;
-    private final WebClient productoWebClient;
+    private final ProductoClient productoClient;
 
-    public DescuentoService(
-        DescuentoRepository descuentoRepository,
-        PromocionRepository promocionRepository,
-        WebClient.Builder webClientBuilder,
-        @Value("${producto-service.url}") String productoServiceUrl
-    ) {
+    public DescuentoService(DescuentoRepository descuentoRepository,
+                            PromocionRepository promocionRepository,
+                            ProductoClient productoClient) {
         this.descuentoRepository = descuentoRepository;
         this.promocionRepository = promocionRepository;
-        this.productoWebClient = webClientBuilder.baseUrl(productoServiceUrl).build();
+        this.productoClient = productoClient;
     }
 
-    
     public Descuento crearDescuento(Descuento descuento, List<Long> productosIds) {
-        // Validar que la promoción existe
         Promocion promocion = promocionRepository.findById(descuento.getPromocion().getIdPromocion())
                 .orElseThrow(() -> new RuntimeException("Promoción no encontrada"));
         descuento.setPromocion(promocion);
-        descuento.setIdProducto(productosIds);
 
-        // Guardar descuento
         Descuento savedDescuento = descuentoRepository.save(descuento);
 
-        // Vincular descuento a productos en el microservicio de productos
-        productosIds.forEach(productoId -> {
-            productoWebClient.post()
-                    .uri("/api/v1/producto/descuentos")
-                    .bodyValue(Map.of("idDescuento", savedDescuento.getIdDescuento(), "idProducto", productoId))
-                    .retrieve()
-                    .toBodilessEntity()
-                    .block();
-        });
+        // Asociar a productos en el microservicio producto
+        productosIds.forEach(productoId -> 
+            productoClient.asociarDescuentoAProducto(productoId, savedDescuento.getIdDescuento())
+        );
 
         return savedDescuento;
+    }
+
+    public Descuento obtenerDescuentoPorCodigo(String codigo) {
+        Descuento descuento = descuentoRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new RuntimeException("Código de descuento no válido o no existe"));
+
+        if (descuento.getPromocion().getFechaExpiracion().isBefore(LocalDate.now())) {
+            throw new RuntimeException("El descuento ha expirado");
+        }
+
+        return descuento;
+    }
+
+    public List<Descuento> obtenerDescuentosActivosPorFecha(LocalDate fechaActual) {
+        return descuentoRepository.findDescuentosActivosPorFecha(fechaActual);
     }
 }

@@ -24,9 +24,9 @@ public class ProductoDescuento {
     private Long idProductodescuento;
 
     @ManyToOne
-    @JoinColumn(name = "idproducto", nullable = false) // Nombre de columna en BD
-    private Producto producto; // Relación N:1
+    @JoinColumn(name = "idproducto", nullable = false)
+    private Producto producto;
 
     @Column(nullable = false, name = "idDescuento")
-    private Long idDescuento; // ID del descuento (microservicio Promoción)
+    private Long idDescuento;  // ID del descuento del microservicio Promoción
 }

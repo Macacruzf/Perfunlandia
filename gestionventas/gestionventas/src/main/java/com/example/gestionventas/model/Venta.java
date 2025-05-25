@@ -3,6 +3,9 @@ package com.example.gestionventas.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,23 +24,21 @@ import lombok.NoArgsConstructor;
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idVenta; // Cambiado de 'id' a 'idVenta'
+    private Long idVenta;
 
     @Column(nullable = false)
-    private Long idUsuario; // Asociado al microservicio de usuario
+    private Long idUsuario; // Solo guarda el ID, datos de Usuario se obtienen via WebClient
 
     @Column(nullable = false)
-    private Long idDireccion; // Asociado al microservicio de dirección
+    private Long idDireccion; // Solo guarda el ID, datos de Dirección se obtienen via WebClient
 
     @Column(nullable = false)
-    private Long idEstadoEnvio; // Asociado al microservicio de estado (tabla estado_envio)
+    private Long idEstadoEnvio; // Solo guarda el ID, datos de EstadoEnvio se obtienen via WebClient
 
     @Column(nullable = false)
-    private LocalDateTime fechaventa; // Cambiado de 'fecha' a 'fecha_venta'
+    private LocalDateTime fechaventa;
 
     @Column(nullable = false)
     private BigDecimal total;
 
 }
-
-
