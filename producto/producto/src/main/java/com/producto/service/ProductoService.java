@@ -1,4 +1,4 @@
-package com.catalogo.service;
+package com.producto.service;
 
 import java.util.List;
 import java.util.Map;
@@ -6,25 +6,36 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.catalogo.model.Categoria;
-import com.catalogo.model.Producto;
-import com.catalogo.repository.CategoriaRepository;
-import com.catalogo.repository.ProductoRepository;
-import com.catalogo.webclient.InventarioClient;
+import com.producto.model.Categoria;
+import com.producto.model.Producto;
+import com.producto.repository.CategoriaRepository;
+import com.producto.repository.ProductoRepository;
+import com.producto.webclient.EstadoClient;
+import com.producto.webclient.InventarioClient;
+import com.producto.webclient.PromocionClient;
+import com.producto.webclient.ReseñaClient;
+import com.producto.webclient.VentaClient;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class CatalogoService {
+public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
     @Autowired
     private InventarioClient inventarioClient;
+    @Autowired
+    private EstadoClient estadoClient;
+    @Autowired
+    private ReseñaClient reseñaClient;
+    @Autowired
+    private PromocionClient promocionClient;
+    @Autowired
+    private VentaClient ventaClient;
 
-    // Métodos para clientes (navegación y búsqueda)
     public List<Producto> getProductos(String nombre, Long categoriaId) {
         if (nombre != null && !nombre.isEmpty()) {
             return productoRepository.findByNombreContainingIgnoreCase(nombre);
@@ -39,26 +50,37 @@ public class CatalogoService {
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     }
 
-    public Map<String, Object> getProductoConStock(Long id) {
+    public Map<String, Object> getProductoConDetalles(Long id) {
         Producto producto = getProductoById(id);
+        Map<String, Object> estado = estadoClient.getEstadoById(producto.getId_estado());
+        Map<String, Object> reseña = reseñaClient.getReseñaById(producto.getId_reseña());
         Map<String, Object> inventario = inventarioClient.getProductoById(id);
+        Map<String, Object> detallesVenta = ventaClient.getDetalleVentaByProductoId(id);
+
         return Map.of(
-                "id", producto.getIdproducto(),
+                "idproducto", producto.getIdproducto(),
                 "nombre", producto.getNombre(),
                 "descripcion", producto.getDescripcion(),
-                "precio", producto.getPrecio(),
+                "precio_unitario", producto.getPrecio_unitario(),
+                "stock", producto.getStock(),
                 "categoriaId", producto.getCategoriaId(),
-                "stock", inventario.get("stock")
+                "id_estado", producto.getId_estado(),
+                "estado", estado != null ? estado.get("estado") : "Sin estado",
+                "id_reseña", producto.getId_reseña(),
+                "reseña", reseña != null ? reseña.get("comentario") : "Sin reseña",
+                "stock_inventario", inventario != null ? inventario.get("stock") : 0,
+                "detalle_venta", detallesVenta != null ? detallesVenta : "Sin detalles de venta"
         );
     }
 
-    // Métodos para gestión de productos (administradores/gerentes)
     public Producto agregarProducto(Producto producto) {
-        // Validar categoría
         categoriaRepository.findById(producto.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        // Validar que el producto exista en el inventario
-        inventarioClient.validarProducto(producto.getIdproducto());
+        estadoClient.validarEstado(producto.getId_estado());
+        if (producto.getId_reseña() != null) {
+            reseñaClient.validarReseña(producto.getId_reseña());
+        }
+        inventarioClient.actualizarStock(producto.getIdproducto(), producto.getStock());
         return productoRepository.save(producto);
     }
 
@@ -66,23 +88,27 @@ public class CatalogoService {
         Producto existente = getProductoById(id);
         existente.setNombre(producto.getNombre());
         existente.setDescripcion(producto.getDescripcion());
-        existente.setPrecio(producto.getPrecio());
+        existente.setPrecio_unitario(producto.getPrecio_unitario());
+        existente.setStock(producto.getStock());
         existente.setCategoriaId(producto.getCategoriaId());
-        // Validar categoría
+        existente.setId_estado(producto.getId_estado());
+        existente.setId_reseña(producto.getId_reseña());
         categoriaRepository.findById(producto.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        // Validar que el producto siga existiendo en el inventario
-        inventarioClient.validarProducto(id);
+        estadoClient.validarEstado(producto.getId_estado());
+        if (producto.getId_reseña() != null) {
+            reseñaClient.validarReseña(producto.getId_reseña());
+        }
+        inventarioClient.actualizarStock(id, producto.getStock());
         return productoRepository.save(existente);
     }
 
     public void eliminarProducto(Long id) {
         Producto producto = getProductoById(id);
-        // Nota: No se valida con inventario al eliminar, ya que el catálogo puede decidir retirar un producto de la vista
+        inventarioClient.eliminarStock(id);
         productoRepository.delete(producto);
     }
 
-    // Métodos para gestión de categorías
     public Categoria agregarCategoria(Categoria categoria) {
         return categoriaRepository.save(categoria);
     }
@@ -98,7 +124,6 @@ public class CatalogoService {
     public void eliminarCategoria(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-        // Verificar que no haya productos asociados
         List<Producto> productos = productoRepository.findByCategoriaId(id);
         if (!productos.isEmpty()) {
             throw new RuntimeException("No se puede eliminar la categoría porque tiene productos asociados");
@@ -110,4 +135,3 @@ public class CatalogoService {
         return categoriaRepository.findAll();
     }
 }
-

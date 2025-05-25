@@ -15,20 +15,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.producto.*;
+import com.producto.model.Categoria;
+import com.producto.model.Producto;
+import com.producto.service.ProductoService;
 
 @RestController
-@RequestMapping("/api/v1/catalogo")
-public class CatalogoController {
+@RequestMapping("/api/v1/producto")
+public class ProductoController {
     @Autowired
-    private CatalogoService catalogoService;
+    private ProductoService productoService;
 
-    // Endpoints para clientes
     @GetMapping("/productos")
     public ResponseEntity<List<Producto>> obtenerProductos(
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) Long categoriaId) {
-        List<Producto> productos = catalogoService.getProductos(nombre, categoriaId);
+        List<Producto> productos = productoService.getProductos(nombre, categoriaId);
         if (productos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -36,20 +37,19 @@ public class CatalogoController {
     }
 
     @GetMapping("/productos/{id}")
-    public ResponseEntity<Map<String, Object>> obtenerProductoConStock(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> obtenerProductoConDetalles(@PathVariable Long id) {
         try {
-            Map<String, Object> producto = catalogoService.getProductoConStock(id);
+            Map<String, Object> producto = productoService.getProductoConDetalles(id);
             return ResponseEntity.ok(producto);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         }
     }
 
-    // Endpoints para gestión de productos (admin/gerente)
     @PostMapping("/productos")
     public ResponseEntity<?> agregarProducto(@RequestBody Producto producto) {
         try {
-            Producto nuevoProducto = catalogoService.agregarProducto(producto);
+            Producto nuevoProducto = productoService.agregarProducto(producto);
             return ResponseEntity.status(201).body(nuevoProducto);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -59,7 +59,7 @@ public class CatalogoController {
     @PutMapping("/productos/{id}")
     public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
         try {
-            Producto actualizado = catalogoService.actualizarProducto(id, producto);
+            Producto actualizado = productoService.actualizarProducto(id, producto);
             return ResponseEntity.ok(actualizado);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -69,17 +69,16 @@ public class CatalogoController {
     @DeleteMapping("/productos/{id}")
     public ResponseEntity<?> eliminarProducto(@PathVariable Long id) {
         try {
-            catalogoService.eliminarProducto(id);
+            productoService.eliminarProducto(id);
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
-    // Endpoints para gestión de categorías
     @GetMapping("/categorias")
     public ResponseEntity<List<Categoria>> obtenerCategorias() {
-        List<Categoria> categorias = catalogoService.getCategorias();
+        List<Categoria> categorias = productoService.getCategorias();
         if (categorias.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -89,7 +88,7 @@ public class CatalogoController {
     @PostMapping("/categorias")
     public ResponseEntity<?> agregarCategoria(@RequestBody Categoria categoria) {
         try {
-            Categoria nuevaCategoria = catalogoService.agregarCategoria(categoria);
+            Categoria nuevaCategoria = productoService.agregarCategoria(categoria);
             return ResponseEntity.status(201).body(nuevaCategoria);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -99,7 +98,7 @@ public class CatalogoController {
     @PutMapping("/categorias/{id}")
     public ResponseEntity<?> actualizarCategoria(@PathVariable Long id, @RequestBody Categoria categoria) {
         try {
-            Categoria actualizada = catalogoService.actualizarCategoria(id, categoria);
+            Categoria actualizada = productoService.actualizarCategoria(id, categoria);
             return ResponseEntity.ok(actualizada);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -109,7 +108,7 @@ public class CatalogoController {
     @DeleteMapping("/categorias/{id}")
     public ResponseEntity<?> eliminarCategoria(@PathVariable Long id) {
         try {
-            catalogoService.eliminarCategoria(id);
+            productoService.eliminarCategoria(id);
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());

@@ -19,11 +19,8 @@ import com.example.gestionventas.webclient.InventarioClient;
 
 
 import jakarta.transaction.Transactional;
-
-
 @Service
 @Transactional
-
 public class VentaService {
 @Autowired
     private VentaRepository ventaRepository;
