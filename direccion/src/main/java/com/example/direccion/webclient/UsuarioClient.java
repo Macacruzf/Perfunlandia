@@ -18,7 +18,7 @@ public class UsuarioClient {
     }
 
     // Método para obtener información del usuario
-    @SuppressWarnings("rawtypes")
+   
     public Mono<Map> obtenerUsuario(Long idUsuario) {
         return webClient.get()
                         .uri("/api/v1/usuarios/{idUsuario}", idUsuario)
