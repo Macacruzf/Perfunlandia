@@ -23,4 +23,7 @@ public class Motivo {
     @Column(nullable = false)
     private String nombre;  
 
+
+    
+
 }

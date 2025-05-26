@@ -1,7 +1,10 @@
 {
-<<<<<<< HEAD
-    "java.configuration.updateBuildConfiguration": "interactive"
-=======
+
+    "java.configuration.updateBuildConfiguration": "disabled",
+
+
+    "java.configuration.updateBuildConfiguration": "interactive",
+
     "java.compile.nullAnalysis.mode": "automatic"
->>>>>>> 7c7671a6ac600fd50fcd7b62498b6fcc5e8965ee
+
 }

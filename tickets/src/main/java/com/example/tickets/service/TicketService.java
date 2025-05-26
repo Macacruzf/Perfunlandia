@@ -1,0 +1,112 @@
+package com.example.tickets.service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.tickets.model.Mensaje;
+import com.example.tickets.model.Motivo;
+import com.example.tickets.model.Ticket;
+import com.example.tickets.repository.MensajeRepository;
+import com.example.tickets.repository.MotivoRepository;
+import com.example.tickets.repository.TicketRepository;
+
+
+@Service
+public class TicketService {
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
+    private MensajeRepository mensajeRepository;
+
+    @Autowired
+    private MotivoRepository motivoRepository;
+
+    public Ticket crearTicket(Ticket ticket) {
+        if (ticket.getMotivo() == null || ((Ticket) ticket.getMotivo()).getIdMotivo() == null) {
+            throw new RuntimeException("El motivo es obligatorio");
+        }
+
+        Motivo motivo = motivoRepository.findById(((Motivo) ticket.getMotivo()).getIdMotivo())
+                .orElseThrow(() -> new RuntimeException("El motivo no se ha encontrado"));
+
+        ticket.setMotivo(motivo);
+        ticket.setFCreacion(LocalDateTime.now());
+        ticket.setEstado("abierto");
+
+        return ticketRepository.save(ticket);
+    }
+
+
+    
+    public Ticket actualizarEstado(Long idTicket, String estado) {
+        Ticket ticket = ticketRepository.findById(idTicket)
+                .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
+
+        if (!List.of("abierto", "en_proceso", "cerrado").contains(estado)) {
+            throw new RuntimeException("Estado inválido");
+        }
+
+        ticket.setEstado(estado);
+        return ticketRepository.save(ticket);
+    }
+
+    
+    public List<Ticket> listarTicketsPorUsuario(Long idUsuario) {
+        return ticketRepository.findByIdUsers(idUsuario);
+    }
+
+    public void eliminarTicket(Long idTicket) {
+        Ticket ticket = ticketRepository.findById(idTicket)
+                .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
+
+        if (mensajeRepository.existsByIdTicket(idTicket)) {
+            throw new RuntimeException("No se puede eliminar: tiene mensajes asociados");
+        }
+
+        ticketRepository.delete(ticket);
+    }
+
+ 
+    
+    public Mensaje agregarMensaje(Long idTicket, Mensaje mensaje) {
+        Ticket ticket = ticketRepository.findById(idTicket)
+                .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
+
+        mensaje.setTicket(ticket);
+        mensaje.setFMensaje(LocalDateTime.now());
+
+        return mensajeRepository.save(mensaje);
+    }
+
+    public List<Mensaje> listarMensajesPorTicket(Long idTicket) {
+        return mensajeRepository.findByIdTicket(idTicket);
+    }
+
+
+    public Motivo crearMotivo(Motivo motivo) {
+        return motivoRepository.save(motivo);
+    }
+
+    public List<Motivo> listarMotivos() {
+        return motivoRepository.findAll();
+    }
+
+
+
+    public List<Ticket> listarTickets() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listarTickets'");
+    }
+
+
+
+    public Ticket obtenerTicketPorId(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerTicketPorId'");
+    }
+}
