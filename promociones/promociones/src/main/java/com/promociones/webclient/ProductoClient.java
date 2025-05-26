@@ -3,9 +3,10 @@ package com.promociones.webclient;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
+@Component
 public class ProductoClient {
     private final WebClient webClient;
 
@@ -15,8 +16,8 @@ public class ProductoClient {
 
     public void asociarDescuentoAProducto(Long productoId, Long idDescuento) {
         webClient.post()
-                 .uri("/api/v1/productodescuento")
-                 .bodyValue(Map.of("idProducto", productoId, "idDescuento", idDescuento))
+                 .uri("/api/v1/productodescuento")  // <-- ESTE ES EL CAMBIO CORRECTO
+                 .bodyValue(Map.of("producto", Map.of("idProducto", productoId), "idDescuento", idDescuento))
                  .retrieve()
                  .toBodilessEntity()
                  .block();

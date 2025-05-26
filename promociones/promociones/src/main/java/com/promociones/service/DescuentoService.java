@@ -13,10 +13,10 @@ import com.promociones.repository.PromocionRepository;
 import com.promociones.webclient.ProductoClient;
 
 import jakarta.transaction.Transactional;
-
 @Service
 @Transactional
 public class DescuentoService {
+
     private final DescuentoRepository descuentoRepository;
     private final PromocionRepository promocionRepository;
     private final ProductoClient productoClient;
@@ -29,17 +29,13 @@ public class DescuentoService {
         this.productoClient = productoClient;
     }
 
-    public Descuento crearDescuento(Descuento descuento, List<Long> productosIds) {
+    public Descuento crearDescuento(Descuento descuento, Long idProducto) {
         Promocion promocion = promocionRepository.findById(descuento.getPromocion().getIdPromocion())
                 .orElseThrow(() -> new RuntimeException("Promoción no encontrada"));
         descuento.setPromocion(promocion);
 
         Descuento savedDescuento = descuentoRepository.save(descuento);
-
-        // Asociar a productos en el microservicio producto
-        productosIds.forEach(productoId -> 
-            productoClient.asociarDescuentoAProducto(productoId, savedDescuento.getIdDescuento())
-        );
+        productoClient.asociarDescuentoAProducto(idProducto, savedDescuento.getIdDescuento());
 
         return savedDescuento;
     }

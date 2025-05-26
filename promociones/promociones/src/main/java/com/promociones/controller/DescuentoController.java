@@ -27,9 +27,9 @@ public class DescuentoController {
 
     @PostMapping
     public ResponseEntity<Descuento> crearDescuento(
-            @RequestBody Descuento descuento, 
-            @RequestParam List<Long> productosIds) {
-        return ResponseEntity.status(201).body(descuentoService.crearDescuento(descuento, productosIds));
+            @RequestBody Descuento descuento,
+            @RequestParam Long idProducto) {
+        return ResponseEntity.status(201).body(descuentoService.crearDescuento(descuento, idProducto));
     }
 
     @GetMapping("/codigo")

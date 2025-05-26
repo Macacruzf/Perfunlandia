@@ -16,8 +16,6 @@ import com.promociones.model.Descuento;
 public interface DescuentoRepository extends JpaRepository<Descuento, Long> {
 
     Optional<Descuento> findByCodigo(String codigo);
-
-    @Query("SELECT d FROM Descuento d " +
-           "WHERE d.promocion.fechaExpiracion >= :fechaActual")
+    @Query("SELECT d FROM Descuento d WHERE d.promocion.fechaExpiracion >= :fechaActual")
     List<Descuento> findDescuentosActivosPorFecha(@Param("fechaActual") LocalDate fechaActual);
 }
