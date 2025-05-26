@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,13 @@ public class EstadoController {
         return estadoService.getAllEstados();
     }
 
+    // ✅ GET /api/v1/estado/{id} - Obtiene un estado por su ID
+    @GetMapping("/{id}")
+    public Estado getEstadoById(@PathVariable Long id) {
+        return estadoService.getEstadoById(id)
+                .orElseThrow(() -> new RuntimeException("Estado con ID " + id + " no existe"));
+    }
+
     // POST /api/v1/estado - Crea un nuevo estado
     @PostMapping
     public Estado createEstado(@RequestBody Estado estado) {
@@ -38,7 +46,7 @@ public class EstadoController {
         return created;
     }
 
-    // POST /api/v1/estado/notify/idEstado=1 - Notificar a otros microservicios
+    // POST /api/v1/estado/notify?idEstado=1 - Notificar a otros microservicios
     @PostMapping("/notify")
     public Map<String, Object> notifyOtherMicroservices(@RequestParam Long idEstado) {
         try {

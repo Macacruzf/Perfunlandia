@@ -53,7 +53,6 @@ public class Ticket {
         throw new UnsupportedOperationException("Unimplemented method 'setEstado'");
     }
 
-    
 
     
 

@@ -11,6 +11,7 @@ import com.estado.webclient.VentaClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -38,10 +39,14 @@ public class EstadoService {
         return estados;
     }
 
+    public Optional<Estado> getEstadoById(Long id) {
+        return estadoRepository.findById(id);
+    }
+
     public Estado createEstado(Estado estado) {
         return estadoRepository.save(estado);
     }
-    
+
     public void notifyOtherMicroservices(Long idEstado) {
         productoClient.notifyProducto(idEstado);
         usuarioClient.notifyUsuario(idEstado);

@@ -11,12 +11,12 @@ import reactor.core.publisher.Mono;
 import java.util.Map;
 
 @Component
-public class EstadoClient {
-private final WebClient webClient;
+    public class EstadoClient {
+    private final WebClient webClient;
 
     public EstadoClient(@Value("${estado-service.url}") String estadoServiceUrl) {
         this.webClient = WebClient.builder()
-                .baseUrl(estadoServiceUrl)
+                .baseUrl(estadoServiceUrl) // Aquí debe incluir solo host:puerto
                 .build();
     }
 
@@ -26,7 +26,7 @@ private final WebClient webClient;
         }
         try {
             Map<String, Object> estado = webClient.get()
-                    .uri("/estados/{id}", id)
+                    .uri("/{id}", id) // Este ID corresponde a GET /api/v1/estado/{id}
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, response -> 
                         response.bodyToMono(String.class)

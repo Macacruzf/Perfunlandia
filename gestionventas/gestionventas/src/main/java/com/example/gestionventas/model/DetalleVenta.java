@@ -37,6 +37,6 @@ public class DetalleVenta {
     private Long idDescuento; 
 
     @ManyToOne
-    @JoinColumn(name = "idVenta", nullable = false)
+    @JoinColumn(name = "id_venta", nullable = false)
     private Venta venta;
 }
