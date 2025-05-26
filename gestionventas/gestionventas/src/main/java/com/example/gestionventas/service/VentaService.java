@@ -13,7 +13,7 @@ import com.example.gestionventas.Repository.DetalleVentaRepository;
 import com.example.gestionventas.Repository.VentaRepository;
 import com.example.gestionventas.model.DetalleVenta;
 import com.example.gestionventas.model.Venta;
-import com.example.gestionventas.webclient.UsuarioClient;
+import com.example.gestionventas.webclient.AutenticadoClient;
 import com.example.gestionventas.webclient.DireccionClient;
 import com.example.gestionventas.webclient.EstadoClient;
 import com.example.gestionventas.webclient.ProductoClient;
@@ -30,7 +30,7 @@ public class VentaService {
     @Autowired
     private DetalleVentaRepository detalleVentaRepository;
     @Autowired
-    private UsuarioClient clienteClient;
+    private AutenticadoClient clienteClient;
     @Autowired
     private DireccionClient direccionClient;
     @Autowired
