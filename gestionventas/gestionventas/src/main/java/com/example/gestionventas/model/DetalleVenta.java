@@ -33,7 +33,7 @@ public class DetalleVenta {
     @Column(nullable = false)
     private BigDecimal subtotal;
 
-    @Column
+    @Column(nullable = false)
     private Long idDescuento; 
 
     @ManyToOne
