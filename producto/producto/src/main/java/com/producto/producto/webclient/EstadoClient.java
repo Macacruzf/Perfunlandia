@@ -16,7 +16,7 @@ import java.util.Map;
 
     public EstadoClient(@Value("${estado-service.url}") String estadoServiceUrl) {
         this.webClient = WebClient.builder()
-                .baseUrl(estadoServiceUrl) // Aquí debe incluir solo host:puerto
+                .baseUrl(estadoServiceUrl) // Aqui debe incluir solo host:puerto
                 .build();
     }
 

@@ -29,9 +29,10 @@ public class Resena {
     @Column(nullable = false)
     private Integer calificacion; 
 
-    @Column(name = "productoId", nullable = false)
+    @Column(name = "usuarioId", nullable = false)
     private Long idUser; // ID del usuario
 
     @Column(name = "productoId", nullable = false)
     private Long idProducto; // ID del producto reseñado
 }
+

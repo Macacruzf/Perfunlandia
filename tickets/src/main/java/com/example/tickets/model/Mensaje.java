@@ -23,18 +23,14 @@ public class Mensaje {
     private Long idMensaje;
 
     @Column(nullable = false)
-    private LocalDateTime fMensaje = LocalDateTime.now();
+    private LocalDateTime fMensaje = LocalDateTime.now(); //fecha de inicio del mensaje
 
     @Column(nullable = false)
     private String mensaje; 
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long idTicket;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idTicket;  
+    
     @Column(nullable = false)
     private Long idUsers;
 

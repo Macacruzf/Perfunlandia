@@ -33,6 +33,10 @@ public class Direccion {
     @JoinColumn(name = "idComuna", nullable = false)
     private Comuna comuna;
 
+    @ManyToOne
+    @JoinColumn(name = "id_region", referencedColumnName = "idRegion", nullable = false)
+    private Region region;
+
     @Column(nullable = false, length = 200)
     private String calle;
 
@@ -42,6 +46,6 @@ public class Direccion {
     @Column(length = 120)
     private String departamento; 
 
-    @Column(length = 10)
+    @Column(length = 12)
     private String codigoPostal; 
 }
