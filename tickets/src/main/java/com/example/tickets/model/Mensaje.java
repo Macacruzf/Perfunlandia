@@ -39,5 +39,10 @@ public class Mensaje {
     private Long idUsers;
 
     @Column(nullable = false)
-    private String tipo; 
+    private String tipo;
+
+    public void setTicket(Ticket ticket) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setTicket'");
+    } 
 }

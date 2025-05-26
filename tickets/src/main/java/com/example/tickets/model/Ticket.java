@@ -38,6 +38,23 @@ public class Ticket {
     @Column(nullable = false)
     private Long idMotivo;
 
+    public Object getMotivo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getMotivo'");
+    }
+
+    public void setMotivo(Motivo motivo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setMotivo'");
+    }
+
+    public void setEstado(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setEstado'");
+    }
+
+    
+
     
 
 }
