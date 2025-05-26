@@ -1,3 +1,4 @@
+
 package com.gestion.privilegio.model;
 
 import jakarta.persistence.Column;

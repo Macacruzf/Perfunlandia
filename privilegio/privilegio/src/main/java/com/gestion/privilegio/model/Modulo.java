@@ -1,3 +1,4 @@
+
 package com.gestion.privilegio.model;
 
 import java.util.List;

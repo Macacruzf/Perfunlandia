@@ -1,3 +1,4 @@
+
 package com.gestion.privilegio.repository;
 
 import java.util.List;

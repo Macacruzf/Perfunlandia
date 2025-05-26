@@ -1,7 +1,10 @@
 package com.example.gestionventas.model;
 
 
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,21 +22,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Venta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idVenta;
 
     @Column(nullable = false)
-    private Date fecha;
+    private Long idUsuario; // Solo guarda el ID, datos de Usuario se obtienen via WebClient
 
     @Column(nullable = false)
-    private Integer montoTotal;
+    private Long idDireccion; // Solo guarda el ID, datos de Dirección se obtienen via WebClient
 
-    @Column(nullable = false, length = 12)
-    private String runCliente;
+    @Column(nullable = false)
+    private Long idEstadoEnvio; // Solo guarda el ID, datos de EstadoEnvio se obtienen via WebClient
 
-    @Column(length = 200)
-    private String detalles;
+    @Column(nullable = false)
+    private LocalDateTime fechaventa;
+
+    @Column(nullable = false)
+    private BigDecimal total;
 
 }

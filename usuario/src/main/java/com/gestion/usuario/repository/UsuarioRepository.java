@@ -1,3 +1,4 @@
+
 package com.gestion.usuario.repository;
 
 import java.util.Optional;
@@ -11,3 +12,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>  {
      Optional<Usuario> findByNickname(String nickname);
 
 }
+

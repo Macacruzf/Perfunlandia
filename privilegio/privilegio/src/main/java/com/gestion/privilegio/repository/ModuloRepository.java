@@ -1,3 +1,4 @@
+
 package com.gestion.privilegio.repository;
 
 
@@ -12,3 +13,4 @@ public interface ModuloRepository extends JpaRepository<Modulo, Long> {
      Optional<Modulo> findByNombreModulo(String nombreModulo);
 
 }
+

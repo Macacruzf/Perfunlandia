@@ -1,3 +1,4 @@
+
 package com.autenticacion.autenticado.model;
 
 import lombok.Data;
@@ -8,3 +9,4 @@ public class Rol {
     private String nombreRol;
 
 }
+

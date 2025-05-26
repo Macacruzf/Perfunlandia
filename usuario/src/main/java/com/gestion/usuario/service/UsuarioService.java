@@ -1,3 +1,4 @@
+
 package com.gestion.usuario.service;
 
 import com.gestion.usuario.model.Usuario;
@@ -9,3 +10,4 @@ public interface UsuarioService {
     
 
 }
+

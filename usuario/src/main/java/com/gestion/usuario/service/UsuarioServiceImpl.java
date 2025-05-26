@@ -1,3 +1,4 @@
+
 package com.gestion.usuario.service;
 
 import java.util.Optional;
@@ -12,7 +13,7 @@ import com.gestion.usuario.repository.UsuarioRepository;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
-     @Autowired
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired

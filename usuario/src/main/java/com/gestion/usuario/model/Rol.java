@@ -1,3 +1,4 @@
+
 package com.gestion.usuario.model;
 
 import java.util.List;

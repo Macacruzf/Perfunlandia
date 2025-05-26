@@ -1,3 +1,4 @@
+
 package com.autenticacion.autenticado.config;
 
 import org.springframework.context.annotation.Bean;
@@ -12,3 +13,5 @@ public class WebClientConfig {
     }
 
 }
+
+
