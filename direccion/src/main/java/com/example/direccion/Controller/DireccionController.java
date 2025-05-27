@@ -16,7 +16,7 @@ import com.example.direccion.model.Direccion;
 import com.example.direccion.model.Region;
 
 @RestController
-@RequestMapping("/api/direcciones")
+@RequestMapping("/api/v1/direcciones")
 public class DireccionController {
 
     private final DireccionService direccionService;
