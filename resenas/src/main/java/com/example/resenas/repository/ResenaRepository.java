@@ -10,7 +10,7 @@ import com.example.resenas.model.Resena;
 @Repository
 public interface ResenaRepository extends JpaRepository<Resena, Long>{
 
-    List<Resena> findByProductoId(Long productoId);
+    List<Resena> findByIdProducto(Long idProducto);
     List<Resena> findByCalificacionGreaterThanEqual(Integer calificacion);
     
 }

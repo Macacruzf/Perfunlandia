@@ -27,22 +27,20 @@ public class TicketService {
     private MotivoRepository motivoRepository;
 
     public Ticket crearTicket(Ticket ticket) {
-        if (ticket.getMotivo() == null || ((Ticket) ticket.getMotivo()).getIdMotivo() == null) {
+        if (ticket.getMotivo() == null || ticket.getMotivo().getIdMotivo() == null) {
             throw new RuntimeException("El motivo es obligatorio");
         }
 
-        Motivo motivo = motivoRepository.findById(((Motivo) ticket.getMotivo()).getIdMotivo())
-                .orElseThrow(() -> new RuntimeException("El motivo no se ha encontrado"));
+        Motivo motivo = motivoRepository.findById(ticket.getMotivo().getIdMotivo())
+                .orElseThrow(() -> new RuntimeException("Motivo no encontrado"));
 
         ticket.setMotivo(motivo);
         ticket.setFCreacion(LocalDateTime.now());
-        ticket.setEstado("abierto");
+        ticket.setEstado("abierto"); // Asegúrate de que Ticket tenga el campo "estado"
 
         return ticketRepository.save(ticket);
     }
 
-
-    
     public Ticket actualizarEstado(Long idTicket, String estado) {
         Ticket ticket = ticketRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
@@ -55,7 +53,6 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
-    
     public List<Ticket> listarTicketsPorUsuario(Long idUsuario) {
         return ticketRepository.findByIdUsers(idUsuario);
     }
@@ -71,13 +68,11 @@ public class TicketService {
         ticketRepository.delete(ticket);
     }
 
- 
-    
     public Mensaje agregarMensaje(Long idTicket, Mensaje mensaje) {
         Ticket ticket = ticketRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
 
-        mensaje.setTicket(ticket);
+        mensaje.setTicket(ticket); // Asegúrate que Mensaje tenga ManyToOne con Ticket
         mensaje.setFMensaje(LocalDateTime.now());
 
         return mensajeRepository.save(mensaje);
@@ -87,7 +82,6 @@ public class TicketService {
         return mensajeRepository.findByIdTicket(idTicket);
     }
 
-
     public Motivo crearMotivo(Motivo motivo) {
         return motivoRepository.save(motivo);
     }
@@ -96,18 +90,13 @@ public class TicketService {
         return motivoRepository.findAll();
     }
 
-
-
     public List<Ticket> listarTickets() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listarTickets'");
+        return ticketRepository.findAll();
     }
 
-
-
     public Ticket obtenerTicketPorId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerTicketPorId'");
+        return ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
     }
 
 

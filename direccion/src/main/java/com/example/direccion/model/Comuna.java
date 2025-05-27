@@ -9,15 +9,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "comunas")
-@Builder
-@NoArgsConstructor
+@Data  // 🔥 Incluye getters/setters automáticamente
 @AllArgsConstructor
-
+@NoArgsConstructor
 public class Comuna {
 
     @Id
@@ -28,16 +27,6 @@ public class Comuna {
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(name = "idRegion", nullable = false)
+    @JoinColumn(name = "id_region", nullable = false)
     private Region region;
-
-    public Long getIdComuna() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getIdComuna'");
-    }
-
-    public Long getIdRegion() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getIdRegion'");
-    }
 }
