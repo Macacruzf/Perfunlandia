@@ -23,21 +23,21 @@ public class Mensaje {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMensaje;
+    private Long idMensaje;  // Clave primaria
 
     @Column(nullable = false)
-    private LocalDateTime fMensaje = LocalDateTime.now();
+    private LocalDateTime fMensaje = LocalDateTime.now();  // Fecha del mensaje
 
     @Column(nullable = false, length = 500)
-    private String mensaje;
+    private String mensaje;  // Contenido del mensaje
 
     @ManyToOne
     @JoinColumn(name = "id_ticket", nullable = false)
-    private Ticket ticket;
+    private Ticket ticket;  // Relación con Ticket
 
     @Column(nullable = false)
-    private Long idUsers;
+    private Long idUsers;  // ID del usuario que envió el mensaje
 
     @Column(nullable = false)
-    private String tipo;
+    private String tipo;  // Tipo del mensaje (puedes cambiar por enum)
 }

@@ -36,7 +36,7 @@ public class TicketService {
 
         ticket.setMotivo(motivo);
         ticket.setFCreacion(LocalDateTime.now());
-        ticket.setEstado("abierto"); // Asegúrate de que Ticket tenga el campo "estado"
+        ticket.setEstado("abierto");
 
         return ticketRepository.save(ticket);
     }
@@ -61,7 +61,7 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
 
-        if (mensajeRepository.existsByIdTicket(idTicket)) {
+        if (mensajeRepository.existsByTicketId(idTicket)) {
             throw new RuntimeException("No se puede eliminar: tiene mensajes asociados");
         }
 
@@ -72,14 +72,14 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
 
-        mensaje.setTicket(ticket); // Asegúrate que Mensaje tenga ManyToOne con Ticket
+        mensaje.setTicket(ticket);
         mensaje.setFMensaje(LocalDateTime.now());
 
         return mensajeRepository.save(mensaje);
     }
 
     public List<Mensaje> listarMensajesPorTicket(Long idTicket) {
-        return mensajeRepository.findByIdTicket(idTicket);
+        return mensajeRepository.findByTicketId(idTicket);
     }
 
     public Motivo crearMotivo(Motivo motivo) {
@@ -99,24 +99,15 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
     }
 
-
-
     public Mensaje guardar(Mensaje mensaje) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'guardar'");
+        return mensajeRepository.save(mensaje);
     }
-
-
 
     public List<Mensaje> listarPorTicket(Long ticketId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listarPorTicket'");
+        return mensajeRepository.findByTicketId(ticketId);
     }
 
-
-
     public void eliminar(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminar'");
+        mensajeRepository.deleteById(id);
     }
 }

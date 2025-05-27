@@ -19,24 +19,16 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
+
     @GetMapping("/usuario/{nickname}")
     public ResponseEntity<Usuario> obtenerUsuarioPorNickname(@PathVariable String nickname) {
         Usuario usuario = authService.buscarPorNickname(nickname);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<Usuario> login(@RequestParam String nickname, @RequestParam String password) {
         Usuario usuario = authService.autenticar(nickname, password);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.status(401).build(); // no autorizado
-        }
+        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.status(401).build();
     }
-    
 }

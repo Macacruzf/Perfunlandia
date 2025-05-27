@@ -7,11 +7,13 @@ import com.autenticado.autenticado.webclient.UsuarioClient;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-     private final UsuarioClient usuarioClient;
+
+    private final UsuarioClient usuarioClient;
 
     public AuthServiceImpl(UsuarioClient usuarioClient) {
         this.usuarioClient = usuarioClient;
     }
+
     @Override
     public Usuario buscarPorNickname(String nickname) {
         return usuarioClient.obtenerPorNickname(nickname);
@@ -25,4 +27,4 @@ public class AuthServiceImpl implements AuthService {
         }
         return null;
     }
-}   
+} 

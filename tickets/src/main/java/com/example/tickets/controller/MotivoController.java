@@ -3,7 +3,6 @@ package com.example.tickets.controller;
 import com.example.tickets.model.Motivo;
 import com.example.tickets.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +19,12 @@ public class MotivoController {
     private TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<Motivo> crearMotivo(@RequestBody Motivo motivo) {
-        Motivo nuevoMotivo = ticketService.crearMotivo(motivo);
-        return ResponseEntity.ok(nuevoMotivo);
+    public Motivo crearMotivo(@RequestBody Motivo motivo) {
+        return ticketService.crearMotivo(motivo);
     }
 
     @GetMapping
-    public ResponseEntity<List<Motivo>> listarMotivos() {
-        List<Motivo> motivos = ticketService.listarMotivos();
-        return ResponseEntity.ok(motivos);
+    public List<Motivo> listarMotivos() {
+        return ticketService.listarMotivos();
     }
 }

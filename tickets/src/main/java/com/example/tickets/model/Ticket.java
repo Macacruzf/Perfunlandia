@@ -1,9 +1,10 @@
 package com.example.tickets.model;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,29 +27,34 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Ticket {
 
-    @Id 
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idTicket;
+    @Column(name = "id_ticket")
+    private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime fCreacion = LocalDateTime.now();
+    private String titulo;
 
     @Column(nullable = false)
-    private Long idUsers;
+    private String descripcion;
 
     @Column(nullable = false)
-    private String comentario;
+    private String estado;
 
-    @OneToMany(mappedBy = "ticket")  // Asegúrate de que Mensaje tenga un campo "Ticket ticket"
-    private List<Mensaje> mensajes;
+    @Column(nullable = false)
+    private LocalDateTime fCreacion;
+
+    @Column(nullable = false)
+    private Long idUsers;  // ID del usuario que creó el ticket
 
     @ManyToOne
-    @JoinColumn(name = "idMotivo", nullable = false)
-    private Motivo motivo;
-    
-    // Si necesitas agregar un estado:
-    @Column(nullable = true)
-    private String estado;
+    @JoinColumn(name = "id_motivo", nullable = false)
+    private Motivo motivo;  // Aquí se añade el campo motivo
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Mensaje> mensajes;
+
 }
 
 

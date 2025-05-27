@@ -11,9 +11,8 @@ import com.example.tickets.model.Mensaje;
 
 public interface MensajeRepository extends JpaRepository<Mensaje, Long>{
 
-    boolean existsByIdTicket(Long idTicket);
-
-    List<Mensaje> findByIdTicket(Long idTicket);
+    List<Mensaje> findByTicketId(Long idTicket);
+    boolean existsByTicketId(Long idTicket);
 
 }
 
