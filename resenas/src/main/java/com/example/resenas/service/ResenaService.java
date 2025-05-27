@@ -20,7 +20,7 @@ public class ResenaService {
     }
 
     public List<Resena> obtenerPorProducto(Long productoId) {
-        return resenaRepository.findByProductoId(productoId);
+        return resenaRepository.findByIdProducto(productoId);
     }
 
     public List<Resena> obtenerDestacadas(Integer calificacionMinima) {
@@ -28,7 +28,7 @@ public class ResenaService {
     }
 
     public Double calcularPromedio(Long productoId) {
-        return resenaRepository.findByProductoId(productoId).stream()
+        return resenaRepository.findByIdProducto(productoId).stream()
                 .mapToInt(Resena::getCalificacion)
                 .average()
                 .orElse(0.0);

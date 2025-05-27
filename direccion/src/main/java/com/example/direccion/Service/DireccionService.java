@@ -28,7 +28,6 @@ public class DireccionService {
     @Autowired
     private RegionRepository regionRepository;
 
-
     public Direccion crearDireccion(Direccion direccion) {
     //Validar datos básicos
     if (direccion == null) {
@@ -64,7 +63,7 @@ public class DireccionService {
     }
 
     public List<Comuna> listarComunasPorRegion(Long idRegion) {
-        return comunaRepository.findByIdRegion(idRegion);
+        return comunaRepository.findByRegion_IdRegion(idRegion);
     }
 
 

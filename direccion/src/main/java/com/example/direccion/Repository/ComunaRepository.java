@@ -9,6 +9,6 @@ import com.example.direccion.model.Comuna;
 
 
 public interface ComunaRepository extends JpaRepository<Comuna, Long> {
-    List<Comuna> findByIdRegion(Long idRegion);
+    List<Comuna> findByRegion_IdRegion(Long idRegion);
 
 }
