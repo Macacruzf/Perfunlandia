@@ -61,7 +61,11 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
 
+<<<<<<< HEAD
         if (mensajeRepository.existsByTicketId(idTicket)) {
+=======
+        if (mensajeRepository.existsById(idTicket)) {
+>>>>>>> 0021a03d23ca0b1c27930f616a4203aaa111efbc
             throw new RuntimeException("No se puede eliminar: tiene mensajes asociados");
         }
 
@@ -69,9 +73,10 @@ public class TicketService {
     }
 
     public Mensaje agregarMensaje(Long idTicket, Mensaje mensaje) {
-        Ticket ticket = ticketRepository.findById(idTicket)
-                .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
+    Ticket ticket = ticketRepository.findById(idTicket)
+            .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
 
+<<<<<<< HEAD
         mensaje.setTicket(ticket);
         mensaje.setFMensaje(LocalDateTime.now());
 
@@ -81,6 +86,16 @@ public class TicketService {
     public List<Mensaje> listarMensajesPorTicket(Long idTicket) {
         return mensajeRepository.findByTicketId(idTicket);
     }
+=======
+    mensaje.setTicket(ticket);
+    mensaje.setFMensaje(LocalDateTime.now());
+    return mensajeRepository.save(mensaje); 
+}
+
+public List<Mensaje> listarMensajesPorTicket(Long idTicket) {
+    return mensajeRepository.findByTicketId(idTicket);  
+}
+>>>>>>> 0021a03d23ca0b1c27930f616a4203aaa111efbc
 
     public Motivo crearMotivo(Motivo motivo) {
         return motivoRepository.save(motivo);
