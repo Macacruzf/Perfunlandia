@@ -9,11 +9,11 @@ import com.example.tickets.model.Mensaje;
 
 @Repository
 
-public interface MensajeRepository extends JpaRepository<Mensaje, Long>{
+public interface MensajeRepository extends JpaRepository<Mensaje, Long> {
 
-    boolean existsByIdTicket(Long idTicket);
-
-    List<Mensaje> findByIdTicket(Long idTicket);
-
+    boolean existsByTicketId(Long ticketId);
+    
+    List<Mensaje> findByTicketId(Long ticketId);
+    
+    List<Mensaje> findByTipo(String tipo);
 }
-
