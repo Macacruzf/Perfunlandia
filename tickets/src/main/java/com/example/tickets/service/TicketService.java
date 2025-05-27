@@ -109,4 +109,25 @@ public class TicketService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'obtenerTicketPorId'");
     }
+
+
+
+    public Mensaje guardar(Mensaje mensaje) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'guardar'");
+    }
+
+
+
+    public List<Mensaje> listarPorTicket(Long ticketId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listarPorTicket'");
+    }
+
+
+
+    public void eliminar(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eliminar'");
+    }
 }
