@@ -12,7 +12,7 @@ import com.example.tickets.model.Ticket;
 public interface TicketRepository extends JpaRepository<Ticket, Long>{
 
     List<Ticket> findByIdUsers(Long idUsuario);
-
+    //asd
 }
 
 

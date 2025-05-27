@@ -10,10 +10,10 @@ import com.example.tickets.model.Mensaje;
 @Repository
 
 public interface MensajeRepository extends JpaRepository<Mensaje, Long> {
-
-    boolean existsByTicketId(Long ticketId);
     
-    List<Mensaje> findByTicketId(Long ticketId);
+    boolean existsByTicketId(Long ticketId);  // Verifica
     
-    List<Mensaje> findByTipo(String tipo);
+    List<Mensaje> findByTicketId(Long ticketId);  // Busca por id  ticket
+    
+    List<Mensaje> findByTipo(String tipo);  // Filtra
 }

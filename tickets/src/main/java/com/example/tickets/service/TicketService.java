@@ -74,11 +74,11 @@ public class TicketService {
 
     mensaje.setTicket(ticket);
     mensaje.setFMensaje(LocalDateTime.now());
-    return mensajeRepository.save(mensaje);  // Usa save directamente
+    return mensajeRepository.save(mensaje); 
 }
 
 public List<Mensaje> listarMensajesPorTicket(Long idTicket) {
-    return mensajeRepository.findByTicketId(idTicket);  // Usa el método corregido
+    return mensajeRepository.findByTicketId(idTicket);  
 }
 
     public Motivo crearMotivo(Motivo motivo) {
