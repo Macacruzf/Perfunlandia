@@ -1,6 +1,7 @@
 
 package com.gestion.usuario.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,38 +20,59 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private RolRepository rolRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public Usuario registrarUsuario(Usuario usuario) {
-        // Detectar rol por correo 
-        String correo = usuario.getCorreo().toLowerCase();
-
-        String nombreRol;
-        if (correo.contains("admin")) {
-            nombreRol = "Admin";
-        } else if (correo.contains("gerente")) {
-            nombreRol = "Gerente";
-        } else if (correo.contains("logistica")) {
-            nombreRol = "Logística";
-        } else {
-            nombreRol = "Cliente";
+        if (usuarioRepository.findByCorreo(usuario.getCorreo()).isPresent()) {
+            throw new RuntimeException("Ya existe un usuario con ese correo.");
         }
 
+        String correo = usuario.getCorreo().toLowerCase();
+        String nombreRol = correo.contains("admin") ? "Admin"
+                          : correo.contains("gerente") ? "Gerente"
+                          : correo.contains("logistica") ? "Logística"
+                          : "Cliente";
+
         Rol rol = rolRepository.findByNombreRol(nombreRol)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + nombreRol));
+            .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + nombreRol));
 
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuario.setRol(rol);
-
         return usuarioRepository.save(usuario);
     }
 
     @Override
     public Usuario buscarPorNickname(String nickname) {
-        Optional<Usuario> optionalUsuario = usuarioRepository.findByNickname(nickname);
-        return optionalUsuario.orElse(null);
+        return usuarioRepository.findByNickname(nickname).orElse(null);
     }
+
     @Override
     public Usuario buscarPorId(Long idUsuario) {
-    Optional<Usuario> optionalUsuario = usuarioRepository.findById(idUsuario);
-    return optionalUsuario.orElse(null);
+        return usuarioRepository.findById(idUsuario).orElse(null);
+    }
+
+    @Override
+    public List<Usuario> listarTodos() {
+        return usuarioRepository.findAll();
+    }
+
+    @Override
+    public void eliminarUsuario(Long id) {
+        usuarioRepository.deleteById(id);
+    }
+
+    @Override
+    public Usuario actualizarUsuario(Long id, Usuario datos) {
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        usuario.setCorreo(datos.getCorreo());
+        usuario.setNickname(datos.getNickname());
+        usuario.setPassword(passwordEncoder.encode(datos.getPassword()));
+        usuario.setRol(datos.getRol());
+
+        return usuarioRepository.save(usuario);
     }
 }

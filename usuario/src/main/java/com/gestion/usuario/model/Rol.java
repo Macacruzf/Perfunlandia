@@ -27,13 +27,13 @@ public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rol_id")
-    private Long idRol;
+    private Long id;
 
-    @Column(name = "nombre", nullable = false, unique = true, length = 50)
+    @Column(name = "nombre_rol", nullable = false, unique = true, length = 50)
     private String nombreRol;
 
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("rol")
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Usuario> usuarios;
 
 }

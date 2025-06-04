@@ -40,10 +40,7 @@ public class Usuario {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "rol_id", nullable = false)
-    @JsonIgnoreProperties("usuarios") 
+    @JsonIgnoreProperties("usuarios")
     private Rol rol;
-  
-
     
-
 }
