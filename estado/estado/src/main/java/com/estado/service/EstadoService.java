@@ -4,10 +4,7 @@ import jakarta.transaction.Transactional;
 
 import com.estado.model.Estado;
 import com.estado.repository.EstadoRepository;
-import com.estado.webclient.PrivilegioClient;
-import com.estado.webclient.ProductoClient;
-import com.estado.webclient.UsuarioClient;
-import com.estado.webclient.VentaClient;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +16,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class EstadoService {
-    private final EstadoRepository estadoRepository;
-    private final ProductoClient productoClient;
-    private final UsuarioClient usuarioClient;
-    private final PrivilegioClient privilegioClient;
-    private final VentaClient ventaClient;
+     private final EstadoRepository estadoRepository;
 
-    public EstadoService(EstadoRepository estadoRepository, ProductoClient productoClient, UsuarioClient usuarioClient, PrivilegioClient privilegioClient, VentaClient ventaClient) {
+    public EstadoService(EstadoRepository estadoRepository) {
         this.estadoRepository = estadoRepository;
-        this.productoClient = productoClient;
-        this.usuarioClient = usuarioClient;
-        this.privilegioClient = privilegioClient;
-        this.ventaClient = ventaClient;
     }
 
     public List<Estado> getAllEstados() {
@@ -47,10 +36,30 @@ public class EstadoService {
         return estadoRepository.save(estado);
     }
 
-    public void notifyOtherMicroservices(Long idEstado) {
-        productoClient.notifyProducto(idEstado);
-        usuarioClient.notifyUsuario(idEstado);
-        privilegioClient.notifyPrivilegio(idEstado);
-        ventaClient.notifyVenta(idEstado);
+    public String notifyUser(Long idEstado) {
+        Optional<Estado> estadoOptional = estadoRepository.findById(idEstado);
+
+        if (estadoOptional.isPresent()) {
+            Estado estado = estadoOptional.get();
+            String nombre = estado.getNombre().toLowerCase();
+
+            switch (nombre) {
+                case "producto pagado":
+                    return "Producto comprado con éxito";
+                case "compra inválida":
+                    return "Compra inválida, favor reintentar";
+                case "salida a ruta aceptada":
+                    return "Tu producto ha salido a ruta";
+                case "en ruta":
+                    return "Tu producto está en camino";
+                case "producto enviado":
+                    return "Tu producto fue entregado exitosamente";
+                default:
+                    return "Estado del producto: " + estado.getNombre();
+            }
+
+        } else {
+            throw new RuntimeException("Estado con ID " + idEstado + " no encontrado");
+        }
     }
 }

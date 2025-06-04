@@ -47,18 +47,16 @@ public class EstadoController {
     }
 
     // POST /api/v1/estado/notify?idEstado=1 - Notificar a otros microservicios
-    @PostMapping("/notify")
-    public Map<String, Object> notifyOtherMicroservices(@RequestParam Long idEstado) {
-        try {
-            estadoService.notifyOtherMicroservices(idEstado);
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Notificación enviada con éxito a otros microservicios");
-            response.put("idEstado", idEstado);
-            return response;
-        } catch (Exception e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return error;
-        }
+   @PostMapping("/notify")
+    public Map<String, Object> notifyUser(@RequestParam Long idEstado) {
+    Map<String, Object> response = new HashMap<>();
+    try {
+        String mensaje = estadoService.notifyUser(idEstado); // devuelve el mensaje correspondiente
+        response.put("message", mensaje);
+        response.put("idEstado", idEstado);
+    } catch (Exception e) {
+        response.put("error", e.getMessage());
     }
+    return response;
+}
 }
