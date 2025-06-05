@@ -24,6 +24,4 @@ public class Categoria {
     @Column(nullable = false)
     private String nombre;
 
-    @Column
-    private String descripcion;
 }

@@ -1,32 +1,26 @@
 package com.estado.webclient;
 
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.estado.dto.ProductoDTO;
 
 import reactor.core.publisher.Mono;
 
 @Component
 public class ProductoClient {
-    private final WebClient webClient;
+  private final WebClient webClient;
 
-    // Constructor con @Value para configurar la URL base desde application.properties
-    public ProductoClient(@Value("${producto-service.url}") String productoServiceUrl) {
-        this.webClient = WebClient.builder()
-                .baseUrl(productoServiceUrl)
-                .build();
+    public ProductoClient(WebClient.Builder builder) {
+        this.webClient = builder.baseUrl("http://localhost:8091/api/productos").build();
     }
 
-    public Map<String, Object> notifyProducto(Long idEstado) {
-        return webClient.post()
-                .uri("/api/v1/producto/estado")  // endpoint relativo
-                .bodyValue(idEstado)
+    public Mono<ProductoDTO> obtenerProductoPorId(Long id) {
+        return webClient.get()
+                .uri("/{id}", id)
                 .retrieve()
-                .bodyToMono(Map.class)
-                .onErrorResume(e -> Mono.just(Map.of("error", e.getMessage())))
-                .block();
+                .bodyToMono(ProductoDTO.class);
     }
 }
 
